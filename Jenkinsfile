@@ -30,7 +30,7 @@ pipeline {
 }
 */
 
-
+/*
 //There are some powerful steps that "wrap" other steps which can easily solve problems
 //like retrying (retry) steps until successful or exiting if a step takes too long (timeout).
 pipeline {
@@ -49,5 +49,24 @@ pipeline {
         }
     }
 }
+*/
 
+
+
+//we wanted to retry our deployment 5 times,
+//but never want to spend more than 3 minutes in total before failing the stage
+pipeline {
+    agent any
+    stages {
+        stage('Deploy') {
+            steps {
+                timeout(time: 3, unit: 'MINUTES') {
+                    retry(5) {
+                        sh './flakey-deploy.sh'
+                    }
+                }
+            }
+        }
+    }
+}
 
