@@ -11,6 +11,9 @@ pipeline {
 }
 */
 
+
+/*
+
 pipeline {
     agent any
     stages {
@@ -21,6 +24,27 @@ pipeline {
                     echo "Multiline shell steps works too"
                     ls -lah
                 '''
+            }
+        }
+    }
+}
+*/
+
+
+//There are some powerful steps that "wrap" other steps which can easily solve problems
+//like retrying (retry) steps until successful or exiting if a step takes too long (timeout).
+pipeline {
+    agent any
+    stages {
+        stage('Deploy') {
+            steps {
+                retry(3) {
+                    sh './flakey-deploy.sh'
+                }
+
+                timeout(time: 3, unit: 'MINUTES') {
+                    sh './health-check.sh'
+                }
             }
         }
     }
