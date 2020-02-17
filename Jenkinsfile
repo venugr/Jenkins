@@ -72,6 +72,7 @@ pipeline {
 */
 
 
+/*
 //When the Pipeline has finished executing,
 //you may need to run clean-up steps or perform some actions
 //based on the outcome of the Pipeline.
@@ -101,6 +102,25 @@ pipeline {
         changed {
             echo 'This will run only if the state of the Pipeline has changed'
             echo 'For example, if the Pipeline was previously failing but is now successful'
+        }
+    }
+}
+*/
+
+
+//Pipeline is designed to easily use Docker images and containers to run inside.
+//This allows the Pipeline to define the environment and tools required without
+//having to configure various system tools and dependencies on agents manually. 
+//This approach allows you to use practically any tool which can be packaged in a Docker container.
+pipeline {
+    agent {
+        docker { image 'node:7-alpine' }
+    }
+    stages {
+        stage('Test') {
+            steps {
+                sh 'node --version'
+            }
         }
     }
 }
