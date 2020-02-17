@@ -107,7 +107,7 @@ pipeline {
 }
 */
 
-
+/*
 //Pipeline is designed to easily use Docker images and containers to run inside.
 //This allows the Pipeline to define the environment and tools required without
 //having to configure various system tools and dependencies on agents manually. 
@@ -120,6 +120,32 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'node --version'
+            }
+        }
+    }
+}
+*/
+
+
+//Environment variables can be set globally, like the example below, or per stage. 
+//As you might expect, setting environment variables per stage means they will only 
+//apply to the stage in which they’re defined.
+pipeline {
+    agent {
+        label '!windows'
+    }
+
+    environment {
+        DISABLE_AUTH = 'true'
+        DB_ENGINE    = 'sqlite'
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                echo "Database engine is ${DB_ENGINE}"
+                echo "DISABLE_AUTH is ${DISABLE_AUTH}"
+                sh 'printenv'
             }
         }
     }
