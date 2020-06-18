@@ -30,7 +30,7 @@ pipeline {
                         'return["Dev","QA","Stage","Prod"]'
                 ]
             ]
-        ])
+        ]])
     
     stages {
         stage('Example') {
