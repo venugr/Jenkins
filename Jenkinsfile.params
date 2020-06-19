@@ -19,7 +19,7 @@ pipeline {
       stage("Test") {
          when {
             expression {
-               params.RunTest
+               params.RunTest && Client == "Hello"
             }
          }
          steps {
@@ -28,6 +28,12 @@ pipeline {
       }
 
       stage('Deploy') {
+
+         when {
+            expression {
+               params.Version == "3.3.3"
+            }
+         }
          steps {
             echo 'Deploying the Application...'
          }
