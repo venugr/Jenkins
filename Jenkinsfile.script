@@ -1,0 +1,64 @@
+def gs 
+
+pipeline {
+
+   agent any
+
+   parameters {
+      string( name: 'Client', defaultValue: '', description: '' )
+      choice( name: 'Version', choices: ['1.0', '2.2', '3.3.3'], description: '' )
+      booleanParam( name: 'RunTest', defaultValue: true, description: '' )
+   }
+
+   stages {
+
+      stage("Init") {
+         steps {
+            script {
+               gs = load "scripts/test1.groovy"
+            }
+         }
+      }
+
+      stage("Build") {
+         steps {
+            echo "Building the Application..."
+            script {
+               gs.buildApp()
+            }
+         }
+      }
+
+      stage("Test") {
+         when {
+            expression {
+               params.RunTest && Client == "Hello"
+            }
+         }
+         steps {
+            echo 'Testing the Application...'
+            script {
+               gs.testApp()
+            }
+         }
+      }
+
+      stage('Deploy') {
+
+         when {
+            expression {
+               params.Version == "3.3.3"
+            }
+         }
+         steps {
+            echo 'Deploying the Application...'
+            echo "Deploying Version: ${params.Version}"
+            script {
+               gs.deployApp()
+            }
+         }
+      }
+
+   }
+
+}
